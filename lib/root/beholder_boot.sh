@@ -17,8 +17,9 @@ then
     apt-get update && sudo apt-get dist-upgrade -y
     curl -sSL https://get.docker.com | sh
     usermod -aG docker pi
-    apt-get install -y git python python-pip libffi-dev python-backports.ssl-match-hostname
-    sudo pip install docker-compose
+    apt-get install -y git libffi-dev libssl-dev python3 python3-pip
+    apt-get remove -y python-configparser
+    pip3 -v install docker-compose
     git clone https://github.com/beholder-rpa/beholder-iot /home/pi/beholder
 fi
 
