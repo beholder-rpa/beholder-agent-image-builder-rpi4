@@ -17,7 +17,7 @@ then
     usermod -aG docker pi
     apt-get install -y git python python-pip libffi-dev python-backports.ssl-match-hostname
     sudo pip install docker-compose
-    git clone https://github.com/beholder-rpa/beholder-agent-iot /home/pi/beholder
+    git clone https://github.com/beholder-rpa/beholder-iot /home/pi/beholder
 fi
 
 # Enable dwc2 on the Pi

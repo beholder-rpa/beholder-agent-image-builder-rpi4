@@ -27,3 +27,9 @@ After answering the prompts, flash a SD/Equivalent with the image file located i
 After the first boot, and dependencies are installed, the SD card can be cloned.
 
 See MANUAL.md for manual image building instructions.
+
+For automated builds, add an .env file with the following variables:
+ - WPA_SSID
+ - WPA_PASSPHRASE
+ - RPI_HOSTNAME
+ - RPI_TIMEZONE

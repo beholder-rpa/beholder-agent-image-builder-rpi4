@@ -51,7 +51,7 @@ cp ./lib/root/hostname /mnt/image/root/etc/
 cp ./lib/root/timezone /mnt/image/root/etc/
 
 # Add the boot script
-sed -i -e '$i \sudo /etc/beholder_boot.sh\n' /mnt/image/root/etc/rc.local
+sed -i -e '$i \/etc/beholder_boot.sh\n' /mnt/image/root/etc/rc.local
 
 $@
 
