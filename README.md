@@ -24,7 +24,11 @@ yarn create-image
 
 After answering the prompts, flash a SD/Equivalent with the image file located in ./images, Attach it to your Raspberry Pi 4 and let 'er rip.
 
-After the first boot, and dependencies are installed, the SD card can be cloned.
+The first boot process will take a bit of time as updates and dependencies will be installed. Once complete simply SSH into ``pi@beholder-01.local``
+
+> Note: If you've ssh'd into the Beholder before, use ```ssh-keygen -R beholder-01.local``` to clear the previous host key.
+
+After the first boot the SD card can be cloned if desired.
 
 See MANUAL.md for manual image building instructions.
 
