@@ -1,4 +1,4 @@
-# Beholder Agent Image Builder - RPi4
+# Beholder IoT Image Builder - RPi4
 
 Automation to create an initial Beholder SD image for the Raspberry Pi 4.
 
