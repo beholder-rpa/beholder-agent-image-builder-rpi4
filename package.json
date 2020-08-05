@@ -1,5 +1,5 @@
 {
-  "name": "beholder-rpi4-image-builder",
+  "name": "beholder--iot-image-builder-rpi4",
   "version": "1.0.0",
   "description": "Interactive Prompt to configure Beholder 4 image",
   "main": "index.js",
@@ -8,8 +8,8 @@
   "scripts": {
     "beholder-image:download": "wget -c -L https://downloads.raspberrypi.org/raspios_lite_armhf_latest -O ./images/raspios_lite_armhf_latest.zip",
     "beholder-image:expand": "unzip -o ./images/raspios_lite_armhf_latest.zip -d ./images",
-    "beholder-image:build": "docker build -t beholder-image-builder .",
-    "beholder-image:create": "docker run -it --privileged -v $PWD/images/:/create/images/ -e WPA_SSID=$WPA_SSID -e WPA_PASSPHRASE=$WPA_PASSPHRASE -e RPI_HOSTNAME=$RPI_HOSTNAME -e RPI_TIMEZONE=$RPI_TIMEZONE beholder-image-builder",
+    "beholder-image:build": "dotenv -- docker build -t beholder-image-builder .",
+    "beholder-image:create": "dotenv -- docker run -it --privileged -v $PWD/images/:/create/images/ -e WPA_SSID -e WPA_PASSPHRASE -e RPI_HOSTNAME -e RPI_TIMEZONE beholder-image-builder",
     "create-image": "run-s beholder-image:download beholder-image:expand beholder-image:build \"beholder-image:create {@}\"",
     "recreate-image": "run-s beholder-image:build \"beholder-image:create {@}\"",
     "start": "./index.js"
@@ -18,6 +18,7 @@
     "npm-run-all": "^4.1.5"
   },
   "dependencies": {
+    "dotenv-cli": "^3.2.0",
     "inquirer": "^7.3.3",
     "lodash": "^4.17.19"
   }

@@ -21,44 +21,52 @@ const writeConfiguration = (answers) => {
   fs.writeFileSync('./lib/root/timezone', `${answers.RPI_TIMEZONE}`);
 }
 
+const preAnswers = cloneDeep(process.env);
 const questions = [
   {
     type: 'input',
     name: 'WPA_SSID',
     message: 'Wifi SSID',
-    validate: required
+    validate: required,
+    when: !preAnswers.WPA_SSID
   },
   {
     type: 'input',
     name: 'WPA_PASSPHRASE',
     message: 'Wifi Passphrase',
-    validate: required
+    validate: required,
+    when: !preAnswers.WPA_SSID
   },
   {
     type: 'input',
     name: 'RPI_HOSTNAME',
     message: 'Hostname',
     default: 'beholder-01.local',
-    validate: required
+    validate: required,
+    when: !preAnswers.WPA_SSID
   },
   {
     type: 'input',
     name: 'RPI_TIMEZONE',
     message: 'Time Zone',
     default: 'America/New_York',
-    validate: required
+    validate: required,
+    when: !preAnswers.WPA_SSID
   },
 ];
 
 inquirer
-  .prompt(questions, cloneDeep(process.env))
+  .prompt(questions)
   .then(answers => {
-    writeConfiguration(answers)
+    writeConfiguration({
+      ...preAnswers,
+      answers
+    })
   })
   .catch(error => {
     if (error.isTtyError) {
       // Fall back to using env variables to determine configuration.
-      writeConfiguration(proceess.env)
+      writeConfiguration(preAnswers)
     } else {
       throw error
     }

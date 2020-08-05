@@ -3,6 +3,8 @@
 # Test if is Root
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run as root" ; exit 1 ; fi
 
+echo "# Executing Beholder IoT install script"
+
 # Update bootloader
 apt update
 apt full-upgrade
@@ -42,28 +44,28 @@ fi
 
 # ensure dnsmasq has been installed
 if [[ ! -e /usr/sbin/dnsmasq ]] ; then
-    apt-get install dnsmasq
+    apt-get install -y dnsmasq
 fi
 
 # Add the address range for the USB
 if [[ ! -e /etc/dnsmasq.d/usb ]] ; then
-    cat << EOF
+    tee -a /etc/dnsmasq.d/usb << EOF 
 interface=usb0
 dhcp-range=10.55.0.2,10.55.0.6,255.255.255.248,1h
 dhcp-option=3
 leasefile-ro
-EOF  > /etc/dnsmasq.d/usb
+EOF
     echo "Created /dnsmasq.d/usb"
 fi
 
 if [[ ! -e /etc/network/interfaces.d/usb0 ]] ; then
-    cat << EOF
+    tee -a /etc/network/interfaces.d/usb0 << EOF
 auto usb0
 allow-hotplug usb0
 iface usb0 inet static
   address 10.55.0.1
   netmask 255.255.255.248
-EOF > > /etc/network/interfaces.d/usb0
+EOF
     echo "Created /etc/network/interfaces.d/usb0"
 fi
 
@@ -82,7 +84,8 @@ cp ./beholder/beholder-otg/beholder_docker.service /etc/systemd/system/
 systemctl enable beholder_docker.service
 
 # Remove the beholder boot command
-sed '/^sudo \/etc\/beholder_boot\.sh/d' /etc/rc.local
+sed -i -e '/^\/etc\/beholder_boot\.sh/d' /etc/rc.local
+rm /etc/beholder_boot.sh
 
 # Reboot
 reboot now

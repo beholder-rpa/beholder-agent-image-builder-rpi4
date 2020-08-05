@@ -1,13 +1,17 @@
 #!/bin/bash
 
+WPA_SSID=$1
+WPA_PASSPHRASE=$2
+RPI_HOSTNAME=$3
+RPI_TIMEZONE=$4
 IMAGE_PATH=$(find /create/images/*.img -type f -print -quit)
 
-if [ ! -e $IMAGE_PATH ]; then
-  echo "No filesystem detected at ${IMAGE_PATH}!"
+if [[ -z "${IMAGE_PATH// }" ]]; then
+  echo "No Raspberry Pi OS image detected at ${IMAGE_PATH}!"
   exit 1
 fi
 
-echo "Using ${IMAGE_PATH}"
+echo "Using ${IMAGE_PATH} as the mountable Raspberry Pi OS image"
 
 # Capture the patition details.
 BOOT_PARTITION=`fdisk -l "${IMAGE_PATH}" | grep "c W95 FAT32 (LBA)"`
@@ -43,17 +47,17 @@ mount -v -o offset=$ROOT_START_BYTE,sizelimit=$ROOT_BYTE_LENGTH -t ext4 "${IMAGE
 cp ./lib/boot/wpa_supplicant.conf /mnt/image/boot
 touch /mnt/image/boot/ssh
 
-# Copy service files on over to the root image
-mkdir -p /mnt/image/root/home/pi/beholder/
-cp ./lib/root/* /mnt/image/root/home/pi/beholder/
+# Copy configuration data on over to the root image
 cp ./lib/root/beholder_boot.sh /mnt/image/root/etc/
+chmod +x /mnt/image/root/etc/beholder_boot.sh
+
 cp ./lib/root/hostname /mnt/image/root/etc/
 cp ./lib/root/timezone /mnt/image/root/etc/
 
 # Add the boot script
-sed -i -e '$i \/etc/beholder_boot.sh\n' /mnt/image/root/etc/rc.local
+sed -i -e '$i\/etc/beholder_boot.sh' /mnt/image/root/etc/rc.local
 
-$@
+${@:5}
 
 # Unmount the partitions
 umount /mnt/image/boot

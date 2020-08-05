@@ -1,10 +1,5 @@
 FROM node:latest as build
 
-ENV WPA_SSID=
-ENV WPA_PASSPHRASE=
-ENV RPI_HOSTNAME=
-ENV RPI_TIMEZONE=
-
 WORKDIR /build
 COPY package.json yarn.lock ./
 
@@ -16,9 +11,10 @@ COPY . .
 
 # multistage
 FROM node:slim as image
+
 WORKDIR /create
 COPY --from=build /build .
 
 VOLUME /create/images
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT "./entrypoint.sh" "${WPA_SSID}" "${WPA_PASSPHRASE}" "${RPI_HOSTNAME}" "${RPI_TIMEZONE}"
