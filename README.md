@@ -1,6 +1,6 @@
-# Beholder Agent Image Builder
+# Beholder Agent Image Builder - RPi4
 
-Builds an initial Beholder Image for the Raspberry Pi 4.
+Automation to create an initial Beholder SD image for the Raspberry Pi 4.
 
 ## Hardware:
 1. Obtain a Raspberry Pi 4, preferrebly one that is Revision 1.2, such as those found [here](https://www.canakit.com/official-raspberry-pi-4-desktop-kit.html?cid=usd&src=raspberrypi) or [here](https://www.amazon.com/Vilros-Raspberry-Complete-Transparent-Cooled/dp/B07VFCB192)
