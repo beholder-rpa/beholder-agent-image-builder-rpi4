@@ -24,7 +24,7 @@ yarn create-image
 
 After answering the prompts, flash a SD/Equivalent with the image file located in ./images, Attach it to your Raspberry Pi 4 and let 'er rip.
 
-The first boot process will take a bit of time as updates and dependencies will be installed. Once complete simply SSH into ``pi@beholder-01.local``
+The first boot process will take a bit of time as updates and dependencies will be installed. Once complete simply SSH into ``beholder@beholder-01.local`` with the default password of ```beholder```
 
 > Note: If you've ssh'd into the Beholder before, use ```ssh-keygen -R beholder-01.local``` to clear the previous host key.
 

@@ -20,7 +20,7 @@ then
     apt-get install -y git libffi-dev libssl-dev python3 python3-pip
     apt-get remove -y python-configparser
     pip3 -v install docker-compose
-    git clone https://github.com/beholder-rpa/beholder-iot /home/pi/beholder
+    git clone https://github.com/beholder-rpa/beholder-iot /home/beholder/beholder
 fi
 
 # Enable dwc2 on the Pi
@@ -50,13 +50,14 @@ fi
 
 # Add the address range for the USB
 if [[ ! -e /etc/dnsmasq.d/usb ]] ; then
+    mkdir -p /etc/netmasq.d/
     tee -a /etc/dnsmasq.d/usb << EOF 
 interface=usb0
 dhcp-range=10.55.0.2,10.55.0.6,255.255.255.248,1h
 dhcp-option=3
 leasefile-ro
 EOF
-    echo "Created /dnsmasq.d/usb"
+    echo "Created /etc/dnsmasq.d/usb"
 fi
 
 if [[ ! -e /etc/network/interfaces.d/usb0 ]] ; then
@@ -74,14 +75,24 @@ fi
 tz=$(cat /etc/timezone)
 timedatectl set-timezone $tz
 
+# Create a beholder user and lock the built-in pi user
+
+adduser --gecos "" beholder
+usermod -a -G adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,input,netdev,spi,i2c,gpio beholder
+echo 'beholder:beholder' | chpasswd
+echo 'beholder ALL=(ALL) NOPASSWD: ALL' | sudo tee /etc/sudoers.d/010_beholder-nopasswd
+usermod -L -s /bin/false -e 1 pi
+
 # Enable HID service
-cp ./beholder/beholder-otg/beholder_otg.service /etc/systemd/system/
-cp ./beholder/beholder-otg/beholder_otg.sh /usr/bin/
-chmod +x /usr/bin/beholder_otg.sh
+cp /home/beholder/beholder/beholder-otg/beholder_otg.service /etc/systemd/system/
+chmod 644 /etc/systemd/system/beholder_otg.service
+chmod +x /home/beholder/beholder/beholder-otg/beholder_otg.sh
 systemctl enable beholder_otg.service
 
 # Enable Beholder docker service
-cp ./beholder/beholder-otg/beholder_docker.service /etc/systemd/system/
+cp /home/beholder/beholder/beholder-otg/beholder_docker.service /etc/systemd/system/
+chmod 644 /etc/systemd/system/beholder_docker.service
+chmod +x /home/beholder/beholder/beholder-otg/beholder_docker.sh
 systemctl enable beholder_docker.service
 
 # Remove the beholder boot command
