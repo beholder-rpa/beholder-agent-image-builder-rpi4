@@ -1,0 +1,12 @@
+[Unit]
+Description=Beholder Boot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/beholder_boot.sh
+ 
+[Install]
+WantedBy=sysinit.target

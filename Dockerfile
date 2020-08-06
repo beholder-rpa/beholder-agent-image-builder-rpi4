@@ -12,6 +12,8 @@ COPY . .
 # multistage
 FROM node:slim as image
 
+RUN apt-get update && apt-get install -y git
+
 WORKDIR /create
 COPY --from=build /build .
 

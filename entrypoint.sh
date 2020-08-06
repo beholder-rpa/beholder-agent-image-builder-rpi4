@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "# Building Beholder Raspberry Pi 4 Image..."
 WPA_SSID=$1
 WPA_PASSPHRASE=$2
 RPI_HOSTNAME=$3
@@ -12,6 +13,9 @@ if [[ -z "${IMAGE_PATH// }" ]]; then
 fi
 
 echo "Using ${IMAGE_PATH} as the mountable Raspberry Pi OS image"
+
+# Clone https://github.com/raspberrypi/firmware to get the latest firmware necessary for MSD boot
+git clone https://github.com/raspberrypi/firmware --depth 1
 
 # Capture the patition details.
 BOOT_PARTITION=`fdisk -l "${IMAGE_PATH}" | grep "c W95 FAT32 (LBA)"`
@@ -43,22 +47,32 @@ mount -v -o offset=$ROOT_START_BYTE,sizelimit=$ROOT_BYTE_LENGTH -t ext4 "${IMAGE
 
 ./index.js
 
+# Copy updated firmware .elf and .dat files to the boot image.
+cp ./firmware/boot/*.elf ./firmware/boot/*.dat /mnt/image/boot
+
 # Copy generated files on over to the boot image
 cp ./lib/boot/wpa_supplicant.conf /mnt/image/boot
 touch /mnt/image/boot/ssh
 
 # Copy configuration data on over to the root image
-cp ./lib/root/beholder_boot.sh /mnt/image/root/etc/
-chmod +x /mnt/image/root/etc/beholder_boot.sh
+cp ./lib/root/beholder_install.sh /mnt/image/root/etc/
+chmod +x /mnt/image/root/etc/beholder_install.sh
+
+cp ./lib/root/beholder_boot.service /mnt/image/root/etc/systemd/system/
+chmod 644 /mnt/image/root/etc/systemd/system/beholder_boot.service
+
+cp ./lib/root/beholder_boot.sh /mnt/image/root/usr/bin/
+chmod +x /mnt/image/root/usr/bin/beholder_boot.sh
 
 cp ./lib/root/hostname /mnt/image/root/etc/
 cp ./lib/root/timezone /mnt/image/root/etc/
 
 # Add the boot script
-sed -i -e '$i\/etc/beholder_boot.sh' /mnt/image/root/etc/rc.local
+sed -i -e '$i\/etc/beholder_install.sh' /mnt/image/root/etc/rc.local
 
 ${@:5}
 
 # Unmount the partitions
 umount /mnt/image/boot
 umount /mnt/image/root
+echo "# Beholder Raspberry Pi 4 Image build completed."

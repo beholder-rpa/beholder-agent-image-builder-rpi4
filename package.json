@@ -1,7 +1,7 @@
 {
-  "name": "beholder--iot-image-builder-rpi4",
+  "name": "beholder-iot-image-builder-rpi4",
   "version": "1.0.0",
-  "description": "Interactive Prompt to configure Beholder 4 image",
+  "description": "Creates a Raspbian OS image pre-configured to use Beholder",
   "main": "index.js",
   "license": "MIT",
   "private": true,
