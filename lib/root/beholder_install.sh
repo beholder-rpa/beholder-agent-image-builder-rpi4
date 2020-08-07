@@ -10,14 +10,19 @@ apt update
 apt full-upgrade
 echo "FIRMWARE_RELEASE_STATUS=\"stable\"" > /etc/default/rpi-eeprom-update
 rpi-eeprom-update -d -a
+apt autoremove -y
 
 # Install dependencies
-apt-get update && sudo apt-get dist-upgrade -y
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+apt-get update && apt-get dist-upgrade -y
 curl -sSL https://get.docker.com | sh
 usermod -aG docker pi
-apt-get install -y git libffi-dev libssl-dev python3 python3-pip
+apt-get install -y git libffi-dev libssl-dev python3 python3-pip nodejs yarn
 apt-get remove -y python-configparser
 pip3 -v install docker-compose
+apt-get clean
 
 # Enable dwc2 on the Pi
 if ! $(grep -q dtoverlay=dwc2 /boot/config.txt) ; then
