@@ -19,14 +19,14 @@ then
     cp /home/beholder/beholder/beholder-otg/beholder_otg.sh /usr/bin/
     chmod 644 /etc/systemd/system/beholder_otg.service
     chmod +x /usr/bin/beholder_otg.sh
-    systemctl enable beholder_otg.service
+    systemctl start beholder_otg.service
 
     # Enable Beholder docker service
     cp /home/beholder/beholder/beholder-otg/beholder_docker.service /etc/systemd/system/
     cp /home/beholder/beholder/beholder-otg/beholder_docker.sh /usr/bin/
     chmod 644 /etc/systemd/system/beholder_docker.service
     chmod +x /usr/bin/beholder_docker.sh
-    systemctl enable beholder_docker.service
+    systemctl start beholder_docker.service
 fi
 
 echo "# Completed Beholder IoT boot script."

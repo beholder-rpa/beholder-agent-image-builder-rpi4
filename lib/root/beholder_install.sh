@@ -79,7 +79,7 @@ timedatectl set-timezone $tz
 # Create a beholder user and lock the built-in pi user
 
 adduser --gecos "" beholder
-usermod -a -G adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,input,netdev,spi,i2c,gpio beholder
+usermod -a -G adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,input,netdev,spi,i2c,gpio,docker beholder
 echo 'beholder:beholder' | chpasswd
 echo 'beholder ALL=(ALL:ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/010_beholder-nopasswd
 usermod -L -s /bin/false -e 1 pi
