@@ -9,6 +9,7 @@ echo "# Executing Beholder IoT boot script..."
 if [ ! -d "/home/beholder/beholder" ] 
 then
     git clone https://github.com/beholder-rpa/beholder-iot /home/beholder/beholder
+    chown -R beholder /home/beholder/beholder
 fi
 
 if [ -d "/home/beholder/beholder/" ]

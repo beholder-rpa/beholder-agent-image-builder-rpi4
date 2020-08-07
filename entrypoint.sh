@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "# Building Beholder Raspberry Pi 4 Image..."
+echo "# Building Beholder Raspberry Pi 4 image..."
 WPA_SSID=$1
 WPA_PASSPHRASE=$2
 RPI_HOSTNAME=$3
@@ -75,4 +75,4 @@ ${@:5}
 # Unmount the partitions
 umount /mnt/image/boot
 umount /mnt/image/root
-echo "# Beholder Raspberry Pi 4 Image build completed."
+echo "# Beholder Raspberry Pi 4 image build completed."

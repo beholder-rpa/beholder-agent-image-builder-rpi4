@@ -81,7 +81,7 @@ timedatectl set-timezone $tz
 adduser --gecos "" beholder
 usermod -a -G adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,input,netdev,spi,i2c,gpio beholder
 echo 'beholder:beholder' | chpasswd
-echo 'beholder ALL=(ALL) NOPASSWD: ALL' | sudo tee /etc/sudoers.d/010_beholder-nopasswd
+echo 'beholder ALL=(ALL:ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/010_beholder-nopasswd
 usermod -L -s /bin/false -e 1 pi
 
 # Enable Beholder Boot service
