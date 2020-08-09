@@ -6,7 +6,8 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/beholder_boot.sh
+ExecStart=/usr/bin/beholder_boot.sh start
+ExecStop=/usr/bin/beholder_boot.sh stop
  
 [Install]
 WantedBy=sysinit.target
