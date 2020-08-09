@@ -11,7 +11,7 @@ export IS_NEW="false"
 if [ ! -d "/home/beholder/beholder" ] 
 then
     git clone https://github.com/beholder-rpa/beholder-iot /home/beholder/beholder
-    chown -R beholder /home/beholder/beholder
+    chown -hR beholder:beholder /home/beholder/beholder
     export IS_NEW="true"
 fi
 
