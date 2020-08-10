@@ -10,7 +10,7 @@ export IS_NEW="false"
 # Ensures that on each boot, the otg/docker scripts are up to date.
 if [ ! -d "/home/beholder/beholder" ] 
 then
-    git clone https://github.com/beholder-rpa/beholder-iot /home/beholder/beholder
+    git clone --depth=1 https://github.com/beholder-rpa/beholder-iot /home/beholder/beholder
     chown -hR beholder:beholder /home/beholder/beholder
     export IS_NEW="true"
 fi
