@@ -17,7 +17,15 @@ echo "# Installing dependencies..."
 apt-get update && apt-get dist-upgrade -y
 curl -sSL https://get.docker.com | sh
 usermod -aG docker pi
-apt-get install -y git libffi-dev libssl-dev '^libssl1.0.[0-9]$' libunwind8 python3 python3-pip
+apt-get install -y \
+    libffi-dev \
+    libssl-dev \
+    '^libssl1.0.[0-9]$' \
+    libunwind8 \
+    python3 \
+    python3-pip \
+    git \
+    certbot
 apt-get remove -y python-configparser
 pip3 -v install docker-compose
 apt-get clean
