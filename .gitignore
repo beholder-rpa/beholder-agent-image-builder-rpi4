@@ -121,5 +121,4 @@ dist
 
 ## Exclude images folder
 /images/**/*
-!/images/*/
-!/images/*/.gitkeep
+!/images/.gitkeep

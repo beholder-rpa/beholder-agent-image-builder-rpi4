@@ -13,16 +13,34 @@ rpi-eeprom-update -d -a
 apt autoremove -y
 
 # Install dependencies
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-
+echo "# Installing dependencies..."
 apt-get update && apt-get dist-upgrade -y
 curl -sSL https://get.docker.com | sh
 usermod -aG docker pi
-apt-get install -y git libffi-dev libssl-dev python3 python3-pip nodejs yarn
+apt-get install -y git libffi-dev libssl-dev '^libssl1.0.[0-9]$' libunwind8 python3 python3-pip
 apt-get remove -y python-configparser
 pip3 -v install docker-compose
 apt-get clean
+
+###################################
+# Download and extract PowerShell
+
+echo "# Installing PowerShell..."
+
+# Grab the latest tar.gz
+wget https://github.com/PowerShell/PowerShell/releases/download/v7.1.3/powershell-7.1.3-linux-arm32.tar.gz
+
+# Make folder to put powershell
+mkdir /usr/bin/powershell
+
+# Unpack the tar.gz file
+tar -xvf ./powershell-7.1.3-linux-arm32.tar.gz -C /usr/bin/powershell
+
+# Create a symlink for PowerShell
+ln -s /usr/bin/powershell/pwsh /usr/bin/pwsh
+
+# Remove the tar.gz file
+rm ./powershell-7.1.3-linux-arm32.tar.gz
 
 # Enable dwc2 on the Pi
 if ! $(grep -q dtoverlay=dwc2 /boot/config.txt) ; then
