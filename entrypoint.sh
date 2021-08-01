@@ -76,3 +76,4 @@ ${@:5}
 umount /mnt/image/boot
 umount /mnt/image/root
 echo "# Beholder Raspberry Pi 4 image build completed."
+echo "# Create a bootable SD or USB drive from the image located at ${IMAGE_PATH/\/create\//.\/} using balenaEtcher or your favourite image creator."
