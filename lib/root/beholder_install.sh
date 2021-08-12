@@ -32,8 +32,8 @@ apt-get clean
 
 ###################################
 # Download and install ctop
-sudo curl -Lo /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/0.7.6/ctop-0.7.6-linux-arm
-sudo chmod +x /usr/local/bin/ctop
+curl -Lo /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/0.7.6/ctop-0.7.6-linux-arm
+chmod +x /usr/local/bin/ctop
 
 ###################################
 # Download and extract PowerShell
