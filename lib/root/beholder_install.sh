@@ -65,6 +65,11 @@ if ! $(grep -q modules-load=dwc2 /boot/cmdline.txt) ; then
     echo "dwc2" | tee -a /etc/modules
 fi
 
+# Allow ctop to display container memory info
+if ! $(grep -q "cgroup_enable=cpuset cgroup_enable=memory" /boot/cmdline.txt) ; then
+    echo -n "cgroup_enable=cpuset cgroup_enable=memory" | tee -a /boot/cmdline.txt
+fi
+
 # Add libcomposite to modules
 if ! $(grep -q libcomposite /etc/modules) ; then
     echo "libcomposite" | tee -a /etc/modules
