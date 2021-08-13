@@ -25,7 +25,8 @@ apt-get install -y \
     python3 \
     python3-pip \
     git \
-    certbot
+    certbot \
+    avahi-utils
 apt-get remove -y python-configparser
 pip3 -v install docker-compose
 apt-get clean
