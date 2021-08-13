@@ -67,6 +67,9 @@ chmod +x /mnt/image/root/usr/bin/beholder_boot.sh
 cp ./lib/root/hostname /mnt/image/root/etc/
 cp ./lib/root/timezone /mnt/image/root/etc/
 
+cp ./lib/root/avahi-daemon.conf /mnt/image/root/etc/avahi/
+chmod 644 /mnt/image/root/etc/avahi/avahi-daemon.conf
+
 # Add the boot script
 sed -i -e '$i\/etc/beholder_install.sh' /mnt/image/root/etc/rc.local
 
