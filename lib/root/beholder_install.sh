@@ -42,19 +42,19 @@ chmod +x /usr/local/bin/ctop
 echo "# Installing PowerShell..."
 
 # Grab the latest tar.gz
-wget https://github.com/PowerShell/PowerShell/releases/download/v7.1.3/powershell-7.1.3-linux-arm32.tar.gz
+wget https://github.com/PowerShell/PowerShell/releases/download/v7.1.4/powershell-7.1.4-linux-arm32.tar.gz
 
 # Make folder to put powershell
 mkdir /usr/bin/powershell
 
 # Unpack the tar.gz file
-tar -xvf ./powershell-7.1.3-linux-arm32.tar.gz -C /usr/bin/powershell
+tar -xvf ./powershell-7.1.4-linux-arm32.tar.gz -C /usr/bin/powershell
 
 # Create a symlink for PowerShell
 ln -s /usr/bin/powershell/pwsh /usr/bin/pwsh
 
 # Remove the tar.gz file
-rm ./powershell-7.1.3-linux-arm32.tar.gz
+rm ./powershell-7.1.4-linux-arm32.tar.gz
 
 # Enable dwc2 on the Pi
 if ! $(grep -q dtoverlay=dwc2 /boot/config.txt) ; then
@@ -68,7 +68,7 @@ fi
 
 # Allow ctop to display container memory info
 if ! $(grep -q "cgroup_enable=cpuset cgroup_enable=memory" /boot/cmdline.txt) ; then
-    echo -n "cgroup_enable=cpuset cgroup_enable=memory" | tee -a /boot/cmdline.txt
+    sed -i '$ s/$/ cgroup_enable=cpuset cgroup_enable=memory/' /boot/cmdline.txt
 fi
 
 # Add libcomposite to modules
