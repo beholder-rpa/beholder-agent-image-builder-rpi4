@@ -31,9 +31,22 @@ apt-get remove -y python-configparser
 pip3 -v install docker-compose
 apt-get clean
 
+# Get the os bits and set a variable
+BITS=$(getconf LONG_BIT)
+
 ###################################
 # Download and install ctop
-curl -Lo /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/0.7.6/ctop-0.7.6-linux-arm
+
+if [ "$BITS" = "64" ]; then
+    echo "# Downloading ctop arm64"
+    curl -Lo /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/0.7.6/ctop-0.7.6-linux-arm64
+fi
+
+if [ "$BITS" = "32" ]; then
+    echo "# Downloading ctop armhf"
+    curl -Lo /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/0.7.6/ctop-0.7.6-linux-armhf
+fi
+
 chmod +x /usr/local/bin/ctop
 
 ###################################
@@ -41,20 +54,39 @@ chmod +x /usr/local/bin/ctop
 
 echo "# Installing PowerShell..."
 
-# Grab the latest tar.gz
-wget https://github.com/PowerShell/PowerShell/releases/download/v7.1.4/powershell-7.1.4-linux-arm32.tar.gz
+if [ "$BITS" = "64" ]; then
+    # Grab the latest tar.gz
+    wget https://github.com/PowerShell/PowerShell/releases/download/v7.1.4/powershell-7.1.4-linux-arm64.tar.gz
 
-# Make folder to put powershell
-mkdir /usr/bin/powershell
+    # Make folder to put powershell
+    mkdir /usr/bin/powershell
 
-# Unpack the tar.gz file
-tar -xvf ./powershell-7.1.4-linux-arm32.tar.gz -C /usr/bin/powershell
+    # Unpack the tar.gz file
+    tar -xvf ./powershell-7.1.4-linux-arm64.tar.gz -C /usr/bin/powershell
 
-# Create a symlink for PowerShell
-ln -s /usr/bin/powershell/pwsh /usr/bin/pwsh
+    # Create a symlink for PowerShell
+    ln -s /usr/bin/powershell/pwsh /usr/bin/pwsh
 
-# Remove the tar.gz file
-rm ./powershell-7.1.4-linux-arm32.tar.gz
+    # Remove the tar.gz file
+    rm ./powershell-7.1.4-linux-arm64.tar.gz
+fi
+
+if [ "$BITS" = "32" ]; then
+    # Grab the latest tar.gz
+    wget https://github.com/PowerShell/PowerShell/releases/download/v7.1.4/powershell-7.1.4-linux-arm32.tar.gz
+
+    # Make folder to put powershell
+    mkdir /usr/bin/powershell
+
+    # Unpack the tar.gz file
+    tar -xvf ./powershell-7.1.4-linux-arm32.tar.gz -C /usr/bin/powershell
+
+    # Create a symlink for PowerShell
+    ln -s /usr/bin/powershell/pwsh /usr/bin/pwsh
+
+    # Remove the tar.gz file
+    rm ./powershell-7.1.4-linux-arm32.tar.gz
+fi
 
 # Enable dwc2 on the Pi
 if ! $(grep -q dtoverlay=dwc2 /boot/config.txt) ; then
