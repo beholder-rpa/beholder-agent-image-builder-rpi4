@@ -7,10 +7,13 @@
   "private": true,
   "scripts": {
     "beholder-image:download": "wget -c -L https://downloads.raspberrypi.org/raspios_lite_armhf_latest -O ./images/raspios_lite_armhf_latest.zip",
+    "beholder-image:download64": "wget -c -L https://downloads.raspberrypi.org/raspios_lite_arm64/images/raspios_lite_arm64-2021-05-28/2021-05-07-raspios-buster-arm64-lite.zip -O ./images/raspios_lite_arm64_2021-05-28.zip",
     "beholder-image:expand": "unzip -o ./images/raspios_lite_armhf_latest.zip -d ./images",
+    "beholder-image:expand64": "unzip -o ./images/raspios_lite_arm64_2021-05-28.zip -d ./images",
     "beholder-image:build": "dotenv -- docker build -t beholder-image-builder .",
     "beholder-image:create": "dotenv -- docker run -it --rm --privileged -v $PWD/images/:/create/images/ -e WPA_SSID -e WPA_PASSPHRASE -e RPI_HOSTNAME -e RPI_TIMEZONE beholder-image-builder",
     "create-image": "run-s beholder-image:download beholder-image:expand beholder-image:build \"beholder-image:create {@}\"",
+    "create-image-64": "run-s beholder-image:download64 beholder-image:expand64 beholder-image:build \"beholder-image:create {@}\"",
     "recreate-image": "run-s beholder-image:build \"beholder-image:create {@}\"",
     "start": "./index.js"
   },

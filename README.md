@@ -22,6 +22,13 @@ yarn install
 yarn create-image
 ```
 
+To build an arm64 based image (Raspios arm64 is currently in beta) run
+
+```
+yarn install
+yarn create-image-64
+```
+
 After answering the prompts, flash a SD with the image file located in ./images, Attach it to your Raspberry Pi 4 and let 'er rip.
 
 The first boot process will take a bit of time as updates and dependencies will be installed. Once complete simply SSH into ``beholder@beholder-01.local`` with the default password of ```beholder```
