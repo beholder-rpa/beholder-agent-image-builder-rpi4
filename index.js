@@ -53,6 +53,18 @@ const questions = [
     validate: required,
     when: !preAnswers.WPA_SSID
   },
+  {
+    type: 'list',
+    name: 'BEHOLDER_MODE',
+    message: 'Beholder Mode',
+    choices: [
+      'beholder',
+      'kubeholder',
+    ],
+    default: 'beholder',
+    validate: required,
+    when: !preAnswers.BEHOLDER_MODE
+  },
 ];
 
 inquirer

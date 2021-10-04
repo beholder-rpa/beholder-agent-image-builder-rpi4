@@ -19,4 +19,4 @@ COPY --from=build /build .
 
 VOLUME /create/images
 
-ENTRYPOINT "./entrypoint.sh" "${WPA_SSID}" "${WPA_PASSPHRASE}" "${RPI_HOSTNAME}" "${RPI_TIMEZONE}"
+ENTRYPOINT "./entrypoint.sh" "${WPA_SSID}" "${WPA_PASSPHRASE}" "${RPI_HOSTNAME}" "${RPI_TIMEZONE}" "${BEHOLDER_MODE}"

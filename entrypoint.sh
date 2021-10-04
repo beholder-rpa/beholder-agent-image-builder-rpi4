@@ -5,6 +5,8 @@ WPA_SSID=$1
 WPA_PASSPHRASE=$2
 RPI_HOSTNAME=$3
 RPI_TIMEZONE=$4
+BEHOLDER_MODE=$5
+
 IMAGE_PATH=$(find /create/images/*.img -type f -print -quit)
 
 if [[ -z "${IMAGE_PATH// }" ]]; then
@@ -55,14 +57,27 @@ cp ./lib/boot/wpa_supplicant.conf /mnt/image/boot
 touch /mnt/image/boot/ssh
 
 # Copy configuration data on over to the root image
-cp ./lib/root/beholder_install.sh /mnt/image/root/etc/
+if (( $BEHOLDER_MODE == "kubeholder" )); then
+  echo "# Setting up Kubeholder..."
+  cp ./lib/root/kubeholder_install.sh /mnt/image/root/etc/beholder_install.sh
+  cp ./lib/root/kubeholder_boot.sh /mnt/image/root/usr/bin/beholder_boot.sh
+
+  cp ./lib/root/kubeholder_userinit.sh /mnt/image/root/etc/
+  chmod +x /mnt/image/root/etc/kubeholder_userinit.sh
+
+  cp ./lib/root/kubeholder_userboot.sh /mnt/image/root/etc/
+  chmod +x /mnt/image/root/etc/kubeholder_userboot.sh
+else
+  echo "# Setting up Beholder..."
+  cp ./lib/root/beholder_install.sh /mnt/image/root/etc/beholder_install.sh
+  cp ./lib/root/beholder_boot.sh /mnt/image/root/usr/bin/beholder_boot.sh
+fi
+
 chmod +x /mnt/image/root/etc/beholder_install.sh
+chmod +x /mnt/image/root/usr/bin/beholder_boot.sh
 
 cp ./lib/root/beholder_boot.service /mnt/image/root/etc/systemd/system/
 chmod 644 /mnt/image/root/etc/systemd/system/beholder_boot.service
-
-cp ./lib/root/beholder_boot.sh /mnt/image/root/usr/bin/
-chmod +x /mnt/image/root/usr/bin/beholder_boot.sh
 
 cp ./lib/root/hostname /mnt/image/root/etc/
 cp ./lib/root/timezone /mnt/image/root/etc/
@@ -76,10 +91,15 @@ chmod 644 /mnt/image/root/etc/systemd/system/avahi-alias@.service
 # Add the boot script
 sed -i -e '$i\/etc/beholder_install.sh' /mnt/image/root/etc/rc.local
 
-${@:5}
+${@:6}
 
 # Unmount the partitions
 umount /mnt/image/boot
 umount /mnt/image/root
-echo "# Beholder Raspberry Pi 4 image build completed."
+if (( $BEHOLDER_MODE == "kubeholder" )); then
+  echo "# Kubeholder Raspberry Pi 4 image build completed."
+else
+  echo "# Beholder Raspberry Pi 4 image build completed."
+fi
+
 echo "# Create a bootable SD or USB drive from the image located at ${IMAGE_PATH/\/create\//.\/} using balenaEtcher or your favourite image creator."
