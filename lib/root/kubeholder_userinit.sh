@@ -11,7 +11,7 @@ arkade get helm
 sudo mv /home/beholder/.arkade/bin/helm /usr/local/bin/
 
 # Install k3s
-curl -sfL https://get.k3s.io | sh -
+curl -sfL https://get.k3s.io | sh -s - --disable traefik --disable servicelb
 
 sudo chown beholder:beholder /etc/rancher/k3s/k3s.yaml
 
