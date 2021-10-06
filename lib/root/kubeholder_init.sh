@@ -3,7 +3,7 @@
 # Test if is Root
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run as root" ; exit 1 ; fi
 
-echo "# Executing Beholder IoT install script"
+echo "# Executing Kubeholder IoT install script"
 
 # Update bootloader
 apt update
@@ -15,39 +15,44 @@ apt autoremove -y
 # Install dependencies
 echo "# Installing dependencies..."
 apt-get update && apt-get dist-upgrade -y
-curl -sSL https://get.docker.com | sh
-usermod -aG docker pi
 apt-get install -y \
     libffi-dev \
     libssl-dev \
     '^libssl1.0.[0-9]$' \
     libunwind8 \
-    python3 \
-    python3-pip \
     git \
     certbot \
     avahi-utils
-apt-get remove -y python-configparser
-pip3 -v install docker-compose
 apt-get clean
 
 # Get the os bits and set a variable
 BITS=$(getconf LONG_BIT)
 
 ###################################
-# Download and install ctop
-
+# Install Terraform
 if [ "$BITS" = "64" ]; then
-    echo "# Downloading ctop arm64"
-    curl -Lo /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/0.7.6/ctop-0.7.6-linux-arm64
+    wget https://releases.hashicorp.com/terraform/1.0.8/terraform_1.0.8_linux_arm64.zip
+    unzip terraform_1.0.8_linux_arm64.zip
+    mv terraform /usr/local/bin/
+    rm terraform_1.0.8_linux_arm64.zip
+
+    wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.34.0/terragrunt_linux_arm64
+    chmod +x terragrunt_linux_arm64
+    mv terragrunt_linux_arm64 /usr/local/bin/terragrunt
 fi
 
 if [ "$BITS" = "32" ]; then
-    echo "# Downloading ctop armhf"
-    curl -Lo /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/0.7.6/ctop-0.7.6-linux-armhf
+    wget https://releases.hashicorp.com/terraform/1.0.8/terraform_1.0.8_linux_arm.zip
+    unzip terraform_1.0.8_linux_arm.zip
+    mv terraform /usr/local/bin/
+    rm terraform_1.0.8_linux_arm.zip
+
+    # No armhf version of terragrunt
 fi
 
-chmod +x /usr/local/bin/ctop
+###################################
+# Download and install arkade
+curl -sLS https://get.arkade.dev | sh
 
 ###################################
 # Download and extract PowerShell
@@ -105,7 +110,7 @@ fi
 
 # Allow ctop to display container memory info
 if ! $(grep -q "cgroup_enable=cpuset cgroup_enable=memory" /boot/cmdline.txt) ; then
-    sed -i '$ s/$/ cgroup_enable=cpuset cgroup_enable=memory/' /boot/cmdline.txt
+    sed -i '$ s/$/ cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory/' /boot/cmdline.txt
 fi
 
 # Add libcomposite to modules
@@ -158,12 +163,20 @@ echo 'beholder:beholder' | chpasswd
 echo 'beholder ALL=(ALL:ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/010_beholder-nopasswd
 usermod -L -s /bin/false -e 1 pi
 
+cp /etc/kubeholder_userinit.sh /home/beholder/.init
+chown beholder:beholder /home/beholder/.init
+chmod +x /home/beholder/.init
+
+cp /etc/kubeholder_userboot.sh /home/beholder/.boot
+chown beholder:beholder /home/beholder/.boot
+chmod +x /home/beholder/.boot
+
 # Enable Beholder Boot service
 systemctl enable beholder_boot.service
 
-# Remove the beholder install command
-sed -i -e '/^\/etc\/beholder_install\.sh/d' /etc/rc.local
-rm /etc/beholder_install.sh
+# Remove the beholder init command
+sed -i -e '/^\/etc\/beholder_init\.sh/d' /etc/rc.local
+rm /etc/beholder_init.sh
 
 # Reboot
 reboot now

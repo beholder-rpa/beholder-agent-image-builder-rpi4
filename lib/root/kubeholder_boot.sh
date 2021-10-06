@@ -13,14 +13,13 @@ then
     systemctl enable beholder_otg.service
 
     # Run user initialization
-
     sudo -u beholder /home/beholder/.init
     rm /home/beholder/.init
 
     echo "# Completed initial run of the Beholder IoT boot script - rebooting..."
     reboot now
 else
-    # Run User land boot script
+    # Run user boot script
     sudo -u beholder /home/beholder/.boot
 
     # Ensure any changes to the HID service are copied over

@@ -60,7 +60,7 @@ touch /mnt/image/boot/ssh
 # Copy configuration data on over to the root image
 if (( $BEHOLDER_MODE == "kubeholder" )); then
   echo "# Setting up Kubeholder..."
-  cp ./lib/root/kubeholder_install.sh /mnt/image/root/etc/beholder_install.sh
+  cp ./lib/root/kubeholder_init.sh /mnt/image/root/etc/beholder_init.sh
   cp ./lib/root/kubeholder_boot.sh /mnt/image/root/usr/bin/beholder_boot.sh
 
   cp ./lib/root/kubeholder_userinit.sh /mnt/image/root/etc/
@@ -70,11 +70,11 @@ if (( $BEHOLDER_MODE == "kubeholder" )); then
   chmod +x /mnt/image/root/etc/kubeholder_userboot.sh
 else
   echo "# Setting up Beholder..."
-  cp ./lib/root/beholder_install.sh /mnt/image/root/etc/beholder_install.sh
+  cp ./lib/root/beholder_init.sh /mnt/image/root/etc/beholder_init.sh
   cp ./lib/root/beholder_boot.sh /mnt/image/root/usr/bin/beholder_boot.sh
 fi
 
-chmod +x /mnt/image/root/etc/beholder_install.sh
+chmod +x /mnt/image/root/etc/beholder_init.sh
 chmod +x /mnt/image/root/usr/bin/beholder_boot.sh
 
 cp ./lib/root/beholder_boot.service /mnt/image/root/etc/systemd/system/
@@ -90,7 +90,7 @@ cp ./lib/root/avahi-alias@.service /mnt/image/root/etc/systemd/system/
 chmod 644 /mnt/image/root/etc/systemd/system/avahi-alias@.service
 
 # Add the boot script
-sed -i -e '$i\/etc/beholder_install.sh' /mnt/image/root/etc/rc.local
+sed -i -e '$i\/etc/beholder_init.sh' /mnt/image/root/etc/rc.local
 
 ${@:7}
 

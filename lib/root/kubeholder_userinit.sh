@@ -14,4 +14,11 @@ sudo mv /home/beholder/.arkade/bin/helm /usr/local/bin/
 curl -sfL https://get.k3s.io | sh -
 
 sudo chown beholder:beholder /etc/rancher/k3s/k3s.yaml
-export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+# Add KUBECONFIG to the environment
+echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" >> ~/.bashrc
+
+# If an init script exists in the cloned beholder folder, run it
+if [ -f ~/beholder/init.sh ]; then
+  ~/beholder/init.sh
+fi
