@@ -15,7 +15,7 @@ Automation to create an initial Beholder SD image for the Raspberry Pi 4.
 
 ## Building an image
 
-The automated process will download the latest Raspberry Pi OS image and add the necessary bits to run Pi-Beholder
+The automated process will download the latest Raspberry Pi OS image and add the necessary bits to run Beholder
 
 ```
 yarn install
@@ -57,3 +57,4 @@ For non-interactive image creation, add an .env file with the following variable
  - WPA_PASSPHRASE
  - RPI_HOSTNAME
  - RPI_TIMEZONE
+ - BEHOLDER_MODE

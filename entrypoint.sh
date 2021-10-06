@@ -1,13 +1,14 @@
 #!/bin/bash
 
 echo "# Building Beholder Raspberry Pi 4 image..."
-WPA_SSID=$1
-WPA_PASSPHRASE=$2
-RPI_HOSTNAME=$3
-RPI_TIMEZONE=$4
-BEHOLDER_MODE=$5
+IMAGE_SUFFIX=$1
+WPA_SSID=$2
+WPA_PASSPHRASE=$3
+RPI_HOSTNAME=$4
+RPI_TIMEZONE=$5
+BEHOLDER_MODE=$6
 
-IMAGE_PATH=$(find /create/images/*.img -type f -print -quit)
+IMAGE_PATH=$(find /create/images/*${IMAGE_SUFFIX}.img -type f -print -quit)
 
 if [[ -z "${IMAGE_PATH// }" ]]; then
   echo "No Raspberry Pi OS image detected at ${IMAGE_PATH}!"
@@ -91,7 +92,7 @@ chmod 644 /mnt/image/root/etc/systemd/system/avahi-alias@.service
 # Add the boot script
 sed -i -e '$i\/etc/beholder_install.sh' /mnt/image/root/etc/rc.local
 
-${@:6}
+${@:7}
 
 # Unmount the partitions
 umount /mnt/image/boot
